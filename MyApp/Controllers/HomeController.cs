@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyApp.Models;
+using MyApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,21 @@ namespace MyApp.Controllers
         {
             // view를 return 할 때 asp.net core mvc 룰에 따라야 함
 
-            return View();
+            List<Teacher> teachers = new List<Teacher>()
+            {
+                new Teacher() {Name = "세종대왕", Class = "한글" },
+                new Teacher() {Name = "이순신", Class = "해상전략" },
+                new Teacher() {Name = "제갈량", Class = "지략" },
+                new Teacher() {Name = "을지문덕", Class = "지상전략" }
+            };
+
+            var viewModel = new StudentTeacherViewModel()
+            {
+                Student = new Student(),
+                Teachers = teachers
+            };
+
+            return View(viewModel);
         }
 
         // 위 함수 : student.cshtml 레이저 파일을 디스플레이
@@ -30,7 +45,8 @@ namespace MyApp.Controllers
         // 유저가 서버로 form을 보낼 때 이게 유저에게 제공된 그 form이 맞는지 토큰을 비교해 서버에서 차단을 결정
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Student(Student model)
+        public IActionResult Student(StudentTeacherViewModel model)
+        //public IActionResult Student(Student model)
         //public IActionResult Student([Bind("Name, Age")] Student model) 
         {
             // HttpHost 요청으로 들어왔을 때 이 모델값들이 유효한 값인지 검사하는 코드
